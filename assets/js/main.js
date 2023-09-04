@@ -29,6 +29,8 @@ const hardGrid = 49;
 
 //decido quante bombe mettere
 const bombNum = 16;
+const loserNumber = [];
+let userClickNum = [];
 
 
 //variabili che utilizzo per tracciare e verificare se l'utente non clicca su una bomba
@@ -42,38 +44,41 @@ startGame.addEventListener('click', function(){
         case 'easy':
             gridTarghet = easyGrid;
             gridTemplate = Math.floor(Math.sqrt(easyGrid));
-            cardBomb(easyGrid,bombNum);
             break;
         
         case 'medium':
             gridTarghet = mediumGrid;
             gridTemplate = Math.floor(Math.sqrt(mediumGrid));
-            cardBomb(easyGrid,bombNum);
             break;
 
         case 'hard':
             gridTarghet = hardGrid;
             gridTemplate = Math.floor(Math.sqrt(hardGrid));
-            cardBomb(easyGrid,bombNum);
             break;
 
-    }
+    };
 
-    //generare numeri bomba
-
-
-
+    
+    
     //rimuovo markup iniziale
     removeMarkup(startMarkup);
-
+    
     //genero un nuovo markup con il titolo del gioco
     gridFieldSection.innerHTML = `<h1 class="w-100 mb-4" >${gameMission}</h1>`; // 'Clicca su una casella'
-
+    
+    //genero numeri bomba e resto in attesa
+    //loserNumber.push(cardBomb(gridTarghet, bombNum));
+    cardBomb(gridTarghet, bombNum);
+    console.log(loserNumber.length);
+    
     //uso una funzione per creare delle card cliccabili
-    genCardEvent(gridFieldSection, gridTarghet, gridTemplate);
-
-
+    genCardEvent(gridFieldSection, gridTarghet, gridTemplate); 
+    
+    
+    
 });
+
+
 
 //funzione per rimuovere il markup interno ad una selezione
 function removeMarkup (markup) {
@@ -99,15 +104,39 @@ function genCardEvent (domElement, targhet, gridColumn) {
 
             this.classList.toggle('eb_active');//attiva o disattiva classe
 
+            // se la card non è stata cliccata, aggiungila all'array
+           if (!userClickNum.includes(i + 1)) {
+
+                    //pusho il tasto cliccato nell'array
+                    userClickNum.push(i + 1);
+
+                    //verifico il numero se è una bomba
+                    if (loserNumber.includes(userClickNum[0])){
+
+                        this.classList.add('eb_game-over');
+
+                        
+
+
+                        console.log('sono uguali');
+                    } else {
+                        console.log('sono diversi');
+                    }
+                    
+                    userClickNum = [];
+            }
+
             //stampo in console la card cliccata
             console.log('Hai cliccato nella casella', i + 1);
-
+            
+            
             //*****************temporaneo, solo per stamparlo in pagina**************************
             document.querySelector('section.grid-field > h1').innerHTML = `Hai cliccato nella casella: ${i + 1}`; // Hai cliccato nella casella: ${i + 1}
-
+        
         }); 
         
     };
+
 
 };
 
@@ -115,21 +144,34 @@ function genCardEvent (domElement, targhet, gridColumn) {
 
 function cardBomb (NumCard, bombNum){
 
-    const bombCard = [];
-
     for (let i = 0; i < bombNum; i++) {
+
         bomb = Math.floor(Math.random() * NumCard + 1);
         
-        if (bombCard.includes(bomb)) {
+        //creo un ciclo affinchè i numeri generati siano tutti diversi
+        if (loserNumber.includes(bomb)) {
             i--;
         } else {
-            bombCard.push(bomb);
+            loserNumber.push(bomb);
         };
 
-        console.log(bombCard);
     };
-
-    return bombCard;
+    
+    console.log('numeri generati dalla funzione ' + loserNumber);
+    return;
     
 };
+
+function checkClick (userClick, loser, bomb) {
+
+    
+    for (let i = 0; i < bomb; i++) {
+
+        if(loser[i + 1] === userClick) {
+            console.log('hai perso');
+        }
+        console.log('sono dentro al ceck', loser[i], userClickNum);
+    }
+    console.log(loser.length);
+}
 

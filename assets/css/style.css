@@ -27,3 +27,7 @@ body {
 .eb_active {
     background-color: #FAF0E6;
 }
+
+.eb_game-over {
+    background-color: rgb(232, 56, 56);
+}
