@@ -19,7 +19,21 @@
         <!-- start page -->
         <section class="start-game text-center">
             <h1>Quando sei pronto per giocare clicca il pulsante qui sotto 👇</h1>
-            <button type="button" class="btn btn-success btn-lg mt-4">Start Game</button>
+
+            <form action="submit" class="d-flex justify-content-center align-items-center gap-4">
+
+                <!-- difficult select -->
+                <select id="difficult" class="btn btn-light mt-4">
+                    <option value="easy" selected>Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+                
+                <!-- start game -->
+                <button type="button" class="btn btn-success btn-lg mt-4">Start Game</button>
+
+            </form>
+
         </section>
 
         <!-- game -->

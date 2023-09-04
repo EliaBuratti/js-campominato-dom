@@ -16,13 +16,40 @@ Proviamo sempre prima con dei console.log() per capire se stiamo ricevendo i dat
 Eventuali validazioni e i controlli possiamo farli anche in un secondo momento.
 */
 
-const startGame = document.querySelector('.start-game > button');
+const startGame = document.querySelector('.start-game button');
+const difficultSelect = document.querySelector('#difficult');
 const startMarkup = document.querySelector('section.start-game');
 const gridFieldSection = document.querySelector('section.grid-field');
 const gameMission = 'Clicca su una casella'
 
+//variabili che determinano la difficltà, se cambio il numero modifico anche la difficoltà. si consiglia per una griglia quadrata di uilizzare numeri multipli per se stessi 7 x 7 = 49 
+const easyGrid = 100;
+const mediumGrid = 81;
+const hardGrid = 49;
+
 //al click del pulsante
 startGame.addEventListener('click', function(){
+
+    //ottengo la difficolta
+    switch (difficultSelect.value) {
+        case 'easy':
+            gridTarghet = easyGrid;
+            gridTemplate = Math.floor(Math.sqrt(easyGrid));
+            break;
+        
+        case 'medium':
+            gridTarghet = mediumGrid;
+            gridTemplate = Math.floor(Math.sqrt(mediumGrid));
+            break;
+
+        case 'hard':
+            gridTarghet = hardGrid;
+            gridTemplate = Math.floor(Math.sqrt(hardGrid));
+            break;
+
+    }
+
+
 
     //rimuovo markup iniziale
     removeMarkup(startMarkup);
@@ -31,7 +58,7 @@ startGame.addEventListener('click', function(){
     gridFieldSection.innerHTML = `<h1 class="w-100 mb-4" >${gameMission}</h1>`; // 'Clicca su una casella'
 
     //uso una funzione per creare delle card cliccabili
-    genCardEvent(gridFieldSection, 100);
+    genCardEvent(gridFieldSection, gridTarghet, gridTemplate);
 
 
 });
@@ -43,7 +70,7 @@ function removeMarkup (markup) {
 };
 
 // funzione per generare le card con un eventlistener con input: dove(domElement) e quante card da creare numero (targhet)
-function genCardEvent (domElement, targhet) {
+function genCardEvent (domElement, targhet, gridColumn) {
 
     for (let i = 0; i < targhet; i++) {
 
@@ -52,6 +79,8 @@ function genCardEvent (domElement, targhet) {
         genElement.className = 'eb_card';
         genElement.append(i + 1);
         domElement.append(genElement);
+        genElement.style.width = `calc(100% / ${gridColumn})`;
+        console.log(genElement);
 
         //genero eventlistener per ogni card creata
         genElement.addEventListener('click', function(){
