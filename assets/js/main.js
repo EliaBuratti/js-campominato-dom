@@ -22,10 +22,17 @@ const startMarkup = document.querySelector('section.start-game');
 const gridFieldSection = document.querySelector('section.grid-field');
 const gameMission = 'Clicca su una casella'
 
-//variabili che determinano la difficltà, se cambio il numero modifico anche la difficoltà. si consiglia per una griglia quadrata di uilizzare numeri multipli per se stessi 7 x 7 = 49 
+//variabili che determinano la difficltà, se cambio il numero modifico anche la difficoltà. si consiglia per una griglia quadrata di uilizzare numeri multipli per se stessi es: 7 x 7 = 49 
 const easyGrid = 100;
 const mediumGrid = 81;
 const hardGrid = 49;
+
+//decido quante bombe mettere
+const bombNum = 16;
+
+
+//variabili che utilizzo per tracciare e verificare se l'utente non clicca su una bomba
+
 
 //al click del pulsante
 startGame.addEventListener('click', function(){
@@ -35,19 +42,24 @@ startGame.addEventListener('click', function(){
         case 'easy':
             gridTarghet = easyGrid;
             gridTemplate = Math.floor(Math.sqrt(easyGrid));
+            cardBomb(easyGrid,bombNum);
             break;
         
         case 'medium':
             gridTarghet = mediumGrid;
             gridTemplate = Math.floor(Math.sqrt(mediumGrid));
+            cardBomb(easyGrid,bombNum);
             break;
 
         case 'hard':
             gridTarghet = hardGrid;
             gridTemplate = Math.floor(Math.sqrt(hardGrid));
+            cardBomb(easyGrid,bombNum);
             break;
 
     }
+
+    //generare numeri bomba
 
 
 
@@ -80,7 +92,7 @@ function genCardEvent (domElement, targhet, gridColumn) {
         genElement.append(i + 1);
         domElement.append(genElement);
         genElement.style.width = `calc(100% / ${gridColumn})`;
-        console.log(genElement);
+        //console.log(genElement);
 
         //genero eventlistener per ogni card creata
         genElement.addEventListener('click', function(){
@@ -98,3 +110,26 @@ function genCardEvent (domElement, targhet, gridColumn) {
     };
 
 };
+
+//funzione per creare numeri bomba
+
+function cardBomb (NumCard, bombNum){
+
+    const bombCard = [];
+
+    for (let i = 0; i < bombNum; i++) {
+        bomb = Math.floor(Math.random() * NumCard + 1);
+        
+        if (bombCard.includes(bomb)) {
+            i--;
+        } else {
+            bombCard.push(bomb);
+        };
+
+        console.log(bombCard);
+    };
+
+    return bombCard;
+    
+};
+
