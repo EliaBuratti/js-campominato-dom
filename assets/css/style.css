@@ -31,3 +31,8 @@ body {
 .eb_game-over {
     background-color: rgb(232, 56, 56);
 }
+
+#game {
+    max-width: 800px;
+    margin: auto;
+}

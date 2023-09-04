@@ -107,31 +107,25 @@ function genCardEvent (domElement, targhet, gridColumn) {
             // se la card non è stata cliccata, aggiungila all'array
            if (!userClickNum.includes(i + 1)) {
 
-                    //pusho il tasto cliccato nell'array
-                    userClickNum.push(i + 1);
+                //pusho il tasto cliccato nell'array
+                userClickNum.push(i + 1);
 
-                    //verifico il numero se è una bomba
-                    if (loserNumber.includes(userClickNum[0])){
-
-                        this.classList.add('eb_game-over');
-
-                        
-
-
-                        console.log('sono uguali');
-                    } else {
-                        console.log('sono diversi');
-                    }
+                //verifico il numero se è una bomba
+                if (checkClick(userClickNum, loserNumber, this)) {
                     
-                    userClickNum = [];
-            }
+                    //aggiungo la classe rossa
+                    this.classList.add('eb_game-over');
+                    
+                    //comunico il punteggio e blocco i click 
+                    gridFieldSection.innerHTML += `<h1 class="w-100 mb-4" >Game over!  Hai totalizzato ${userClickNum.length} punti</h1>`;
+
+                }              
+            };
 
             //stampo in console la card cliccata
             console.log('Hai cliccato nella casella', i + 1);
+
             
-            
-            //*****************temporaneo, solo per stamparlo in pagina**************************
-            document.querySelector('section.grid-field > h1').innerHTML = `Hai cliccato nella casella: ${i + 1}`; // Hai cliccato nella casella: ${i + 1}
         
         }); 
         
@@ -162,16 +156,21 @@ function cardBomb (NumCard, bombNum){
     
 };
 
-function checkClick (userClick, loser, bomb) {
+function checkClick (userClick, loser) {
 
     
-    for (let i = 0; i < bomb; i++) {
+    for (let i = 0; i < loser.length; i++) {
 
-        if(loser[i + 1] === userClick) {
-            console.log('hai perso');
+        if (loser.includes(userClick[i])){
+
+            return true;
+
+        } else {
+            console.log('sono diversi');
         }
-        console.log('sono dentro al ceck', loser[i], userClickNum);
     }
     console.log(loser.length);
+
+    return;
 }
 
