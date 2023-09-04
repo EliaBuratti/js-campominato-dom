@@ -29,6 +29,8 @@ const hardGrid = 49;
 
 //decido quante bombe mettere
 const bombNum = 16;
+
+//variabili per verificare l'andamento del game
 const loserNumber = [];
 let userClickNum = [];
 
@@ -111,16 +113,24 @@ function genCardEvent (domElement, targhet, gridColumn) {
                 userClickNum.push(i + 1);
 
                 //verifico il numero se è una bomba
-                if (checkClick(userClickNum, loserNumber, this)) {
+                if (checkClick(userClickNum, loserNumber, targhet)) {
                     
                     //aggiungo la classe rossa
                     this.classList.add('eb_game-over');
                     
                     //comunico il punteggio e blocco i click 
-                    gridFieldSection.innerHTML += `<h1 class="w-100 mb-4" >Game over!  Hai totalizzato ${userClickNum.length} punti</h1>`;
+                    gridFieldSection.innerHTML += `<h1 class="w-100 mb-4" >Game over!  Hai totalizzato ${userClickNum.length - 1} punti</h1>`;
 
-                }              
+                } 
+
+                if ((userClickNum.length - loserNumber.length + 1) === targhet - loserNumber.length) {
+
+                    gridFieldSection.innerHTML += `<h1 class="w-100 mb-4" >Complimenti, hai vinto! Il tuo punteggio è: ${userClickNum.length} punti</h1>`;
+
+                };
+                console.log(Number((userClickNum.length + 1) - loserNumber.length) === Number(targhet - loserNumber.length));
             };
+
 
             //stampo in console la card cliccata
             console.log('Hai cliccato nella casella', i + 1);
@@ -156,10 +166,10 @@ function cardBomb (NumCard, bombNum){
     
 };
 
-function checkClick (userClick, loser) {
+function checkClick (userClick, loser, gridCard) {
 
     
-    for (let i = 0; i < loser.length; i++) {
+    for (let i = 0; i < gridCard; i++) {
 
         if (loser.includes(userClick[i])){
 
@@ -169,7 +179,7 @@ function checkClick (userClick, loser) {
             console.log('sono diversi');
         }
     }
-    console.log(loser.length);
+    console.log(gridCard);
 
     return;
 }
