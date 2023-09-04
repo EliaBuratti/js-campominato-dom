@@ -22,7 +22,7 @@ const startMarkup = document.querySelector('section.start-game');
 const gridFieldSection = document.querySelector('section.grid-field');
 const gameMission = 'Clicca su una casella'
 
-//variabili che determinano la difficltà, se cambio il numero modifico anche la difficoltà. si consiglia per una griglia quadrata di uilizzare numeri multipli per se stessi es: 7 x 7 = 49 
+//variabili che determinano la difficltà, se cambio il numero modifico anche la difficoltà. si consiglia per una griglia quadrata, di uilizzare numeri multipli per se stessi es: 7 x 7 = 49 
 const easyGrid = 100;
 const mediumGrid = 81;
 const hardGrid = 49;
@@ -34,11 +34,7 @@ const bombNum = 16;
 const loserNumber = [];
 let userClickNum = [];
 
-
-//variabili che utilizzo per tracciare e verificare se l'utente non clicca su una bomba
-
-
-//al click del pulsante
+//al click del pulsante start game
 startGame.addEventListener('click', function(){
 
     //ottengo la difficolta
@@ -61,34 +57,33 @@ startGame.addEventListener('click', function(){
     };
 
     
+    removeMarkup(startMarkup); //rimuovo markup iniziale
     
-    //rimuovo markup iniziale
-    removeMarkup(startMarkup);
+    gridFieldSection.innerHTML = `<h1 class="w-100 mb-4" >${gameMission}</h1>`; //genero un nuovo markup con il titolo del gioco
     
-    //genero un nuovo markup con il titolo del gioco
-    gridFieldSection.innerHTML = `<h1 class="w-100 mb-4" >${gameMission}</h1>`; // 'Clicca su una casella'
+    cardBomb(gridTarghet, bombNum); //genero numeri bomba e resto in attesa
     
-    //genero numeri bomba e resto in attesa
-    //loserNumber.push(cardBomb(gridTarghet, bombNum));
-    cardBomb(gridTarghet, bombNum);
-    console.log(loserNumber.length);
-    
-    //uso una funzione per creare delle card cliccabili
-    genCardEvent(gridFieldSection, gridTarghet, gridTemplate); 
-    
-    
-    
+    genCardEvent(gridFieldSection, gridTarghet, gridTemplate); //uso una funzione per creare delle card cliccabili
+
 });
 
-
-
 //funzione per rimuovere il markup interno ad una selezione
+/**
+ * 
+ * @param {domElement} markup 
+ */
 function removeMarkup (markup) {
 
     markup.innerHTML = '';
 };
 
-// funzione per generare le card con un eventlistener con input: dove(domElement) e quante card da creare numero (targhet)
+// funzione per generare le card con un eventlistener
+/**
+ * 
+ * @param {domElement} domElement a domelement to put new card
+ * @param {number} targhet wich card to create
+ * @param {number} gridColumn a number of column to divide the cards
+ */
 function genCardEvent (domElement, targhet, gridColumn) {
 
     for (let i = 0; i < targhet; i++) {
@@ -99,7 +94,6 @@ function genCardEvent (domElement, targhet, gridColumn) {
         genElement.append(i + 1);
         domElement.append(genElement);
         genElement.style.width = `calc(100% / ${gridColumn})`;
-        //console.log(genElement);
 
         //genero eventlistener per ogni card creata
         genElement.addEventListener('click', function(){
@@ -109,20 +103,20 @@ function genCardEvent (domElement, targhet, gridColumn) {
             // se la card non è stata cliccata, aggiungila all'array
            if (!userClickNum.includes(i + 1)) {
 
-                //pusho il tasto cliccato nell'array
-                userClickNum.push(i + 1);
+                
+                userClickNum.push(i + 1); //pusho il tasto cliccato nell'array
 
                 //verifico il numero se è una bomba
                 if (checkClick(userClickNum, loserNumber, targhet)) {
                     
-                    //aggiungo la classe rossa
-                    this.classList.add('eb_game-over');
+                    this.classList.add('eb_game-over');//aggiungo la classe rossa
                     
                     //comunico il punteggio e blocco i click 
                     gridFieldSection.innerHTML += `<h1 class="w-100 mb-4" >Game over!  Hai totalizzato ${userClickNum.length - 1} punti</h1>`;
 
                 } 
 
+                //quando l'utente clicca su tutte le caselle senza cliccare sulla bomba
                 if ((userClickNum.length - loserNumber.length + 1) === targhet - loserNumber.length) {
 
                     gridFieldSection.innerHTML += `<h1 class="w-100 mb-4" >Complimenti, hai vinto! Il tuo punteggio è: ${userClickNum.length} punti</h1>`;
@@ -130,22 +124,20 @@ function genCardEvent (domElement, targhet, gridColumn) {
                 };
                 console.log(Number((userClickNum.length + 1) - loserNumber.length) === Number(targhet - loserNumber.length));
             };
-
-
             //stampo in console la card cliccata
-            console.log('Hai cliccato nella casella', i + 1);
-
-            
-        
-        }); 
-        
+            //console.log('Hai cliccato nella casella', i + 1);
+        });  
     };
-
-
 };
 
 //funzione per creare numeri bomba
 
+/**
+ * 
+ * @param {number} NumCard 
+ * @param {number} bombNum 
+ * @returns object
+ */
 function cardBomb (NumCard, bombNum){
 
     for (let i = 0; i < bombNum; i++) {
@@ -166,6 +158,14 @@ function cardBomb (NumCard, bombNum){
     
 };
 
+// funzione per controllare i numeri cliccati
+/**
+ * 
+ * @param {object} userClick array to compare 
+ * @param {object} loser number to lose the game
+ * @param {number} gridCard number of total card
+ * @returns boolean
+ */
 function checkClick (userClick, loser, gridCard) {
 
     
@@ -174,13 +174,8 @@ function checkClick (userClick, loser, gridCard) {
         if (loser.includes(userClick[i])){
 
             return true;
-
-        } else {
-            console.log('sono diversi');
-        }
-    }
-    console.log(gridCard);
-
+        };
+    };
     return;
-}
+};
 
